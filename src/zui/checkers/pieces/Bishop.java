@@ -1,6 +1,7 @@
 package zui.checkers.pieces;
 
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -35,49 +36,52 @@ public class Bishop extends Piece {
 	public Set<Move> getValidSteps( ) {
 		Set<Move> moves = new HashSet();
 
-		moves = getValidStepsRecursively(false,0);
+		moves = getValidStepsRecursively(false,0, null);
 		
 		return moves;
 	}
 	
-	private Set<Move> getValidStepsRecursively(boolean onlyScore, int score) {
+	private Set<Move> getValidStepsRecursively(boolean onlyScore, int score, Move ancestorMove) {
 		Set<Move> moves = new HashSet();
 		
-		Move mr = getValid(getRDiagonal(), false, onlyScore);
-		Move ml = getValid(getLDiagonal(), true, onlyScore);
+		Move mr = getValid(getRDiagonal(), false, onlyScore, score);
+		Move ml = getValid(getLDiagonal(), true, onlyScore, score);
 		
-		getNextMoves(mr, moves, score);
-		getNextMoves(ml, moves, score);
+		getNextMoves(mr, moves, score, ancestorMove);
+		getNextMoves(ml, moves, score, ancestorMove);
 		
 		return moves;
 	}
 	
 	
-	private void getNextMoves(Move ml,  Set<Move> moves, int score) {
+	private void getNextMoves(Move ml,  Set<Move> moves, int score, Move ancestorMove) {
 //		Set<Move> buffMoves = new HashSet<Move>();
 		if(ml != null) {
 			moves.add(ml);
+			ml.setAncestorMove(ancestorMove);
 			if(ml.score > 0) {
 				Piece tmpPiece = this.clone();
 				
 				doMove(ml);
 
-				moves.addAll(getValidStepsRecursively(true, (score + 1)));
+				moves.addAll(getValidStepsRecursively(true, (score + 1), ml));
 				
 				// krok spat
-				doMove(new Move(this, tmpPiece.getX(), tmpPiece.getY(), true, 0));
+				doReverseMove(this, ml, tmpPiece);
 			}
 		}
 	}
 	
+	
+
 	/**
 	 * @param Diagonal figurky na danej diagonale
 	 * @param isLeft je lava diagonala?
 	 * @param onlyScore vrati iba pohyb ktory preskocil superovho 
 	 * @return pohyb vyhovujuci kriteriam
 	 */
-	private Move getValid( List<Piece> Diagonal, boolean isLeft, boolean onlyScore) {
-		
+	private Move getValid( List<Piece> Diagonal, boolean isLeft, boolean onlyScore, int previousScore) {
+		Piece strickenPiece = null;
 		int indexMe = Diagonal.indexOf(this) + getAgent().attackDir;
 		
 		int length = 0;
@@ -106,11 +110,13 @@ public class Bishop extends Piece {
 					}
 				}
 				
-				return getMove(length, isLeft, score);
+				return getMove(length, isLeft, score+previousScore, strickenPiece);
 			}else{ //obsadene policko
 				if(piece.getAgent().equals(this.getAgent())) { //nemozem preskakovat svojich
 					return null;
 				}
+				
+				strickenPiece =  piece;
 				
 				score++;
 			}
@@ -128,11 +134,11 @@ public class Bishop extends Piece {
 	 * @param score skore vyhodenych figurok
 	 * @return
 	 */
-	private Move getMove(int length, boolean isLeft, int score) {
+	private Move getMove(int length, boolean isLeft, int score, Piece strickenPiece) {
 		if(isLeft) {
-			return new Move(this, getX()+(length * -1), getY()+length, true, score);
+			return new Move(this, getX()+(length * -1), getY()+length, true, score, strickenPiece);
 		}else{
-			return new Move(this, getX()+length, getY()+length, true, score);
+			return new Move(this, getX()+length, getY()+length, true, score, strickenPiece);
 		}
 		
 	}

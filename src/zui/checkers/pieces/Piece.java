@@ -94,8 +94,17 @@ public abstract class Piece {
     
     public void doMove(Move move) {
     	map.removePiece(this);
+    	move.removePiecesOnMove(map);
     	map.setPiece(move.x, move.y, this);
     	
+    }
+    
+    public void doReverseMove(Piece actualPiece, Move ml, Piece tmpPiece) {
+    	doMove(new Move(actualPiece, tmpPiece.getX(), tmpPiece.getY(), true, 0, null));
+    	
+    	// vratit vyhodene figurky
+    	ml.addPiecesOnMove(map);
+	    
     }
     
     protected abstract String getImageId();

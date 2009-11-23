@@ -71,4 +71,7 @@ public abstract class Agent {
      */
     public abstract Move act();
     
+    public final int getScore() {
+    	return getPieces().size() - getOpponentPieces().size();
+    }
 }

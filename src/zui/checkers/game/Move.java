@@ -1,5 +1,11 @@
 package zui.checkers.game;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import zui.checkers.pieces.Map;
 import zui.checkers.pieces.Piece;
 
 /**
@@ -11,6 +17,7 @@ import zui.checkers.pieces.Piece;
 public class Move {
 
     public final Piece piece;
+    private Move ancestorMove;
     
     /**
     * <tt>true</tt> ak tento tah nie je definitivnym
@@ -22,7 +29,9 @@ public class Move {
     
     public final int y;
     
-    public final int score;
+    public final Piece strickenPiece;
+	public final int score;
+    
     
     /**
      * @param piece Figurka, ktoru chceme tahat.
@@ -30,19 +39,80 @@ public class Move {
      * @param y y-ova suradnica tahu
      * @param tmp <tt>true</tt> ak tento tah nie je definitivnym
      * rozhodnutim agenta, t.z. ze sa este moze zmenit.
+     * @param strickenPieces 
      */
-    public Move(Piece piece, int x, int y, boolean tmp, int score) {
-        this.piece = piece;
-        this.x = x;
-        this.y = y;
-        this.tmp = tmp;
-        this.score = score;
-    }
+	public Move(Piece piece, int x, int y, boolean tmp, int score,
+	        Piece strickenPiece) {
+		this.piece = piece;
+		this.x = x;
+		this.y = y;
+		this.tmp = tmp;
+		this.score = score;
+		this.strickenPiece = strickenPiece;
+	}
 
 	@Override
     public String toString() {
 
 	    return "["+x+","+y+"], "+score;
     }
+	
+	public void setAncestorMove(Move m) {
+		ancestorMove = m;
+    }
+	
+	public Move getAncestorMove() {
+    	return ancestorMove;
+    }
+
+	private Set<Move> getAncestorMoves() {
+		Set<Move> buff = new HashSet<Move>();
+		buff.add(this);
+		Move m = ancestorMove; 
+		while(m != null) {
+			buff.add(m);
+			m = m.getAncestorMove();
+		}
+		
+		return buff;
+	}
+
+	public Set<Piece> getStrickenPieces() {
+		Set<Piece> buff = new HashSet<Piece>();
+    	for(Iterator<Move> i = getAncestorMoves().iterator(); i.hasNext();) {
+    		Move m = i.next();
+    		
+    		if(m.strickenPiece != null) {
+    			buff.add(m.strickenPiece);
+    		}
+    	}
+    	
+		return buff;
+    }
+	
+	public void removePiecesOnMove(Map map) {
+		Set<Piece> buffStrickenPieces =  getStrickenPieces(); 
+		if(buffStrickenPieces.size() == 0) {
+			return ;
+		}
+		
+		for(Iterator<Piece> i = buffStrickenPieces.iterator(); i.hasNext();) {
+			Piece p = i.next();
+			map.removePiece(p);
+		}
+	}
+	
+	public void addPiecesOnMove(Map map) {
+		Set<Piece> buffStrickenPieces =  getStrickenPieces(); 
+		if(buffStrickenPieces.size() == 0) {
+			return ;
+		}
+		
+		for(Iterator<Piece> i = buffStrickenPieces.iterator(); i.hasNext();) {
+			Piece p = i.next();
+			map.setPiece(p.getX(), p.getY(), p);
+		}
+	}
+	
 	
 }
