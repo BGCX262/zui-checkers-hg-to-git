@@ -143,5 +143,9 @@ public class Game {
     	agentOnTurn = getOpponent(getAgentOnTurn());
     	gui.setAgentOnTurnHighlighted(getAgentOnTurnId());
     }
+    
+    public GUI getGui() {
+    	return gui;
+    }
 
 }

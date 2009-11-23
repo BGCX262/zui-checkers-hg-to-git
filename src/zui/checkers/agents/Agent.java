@@ -2,6 +2,7 @@ package zui.checkers.agents;
 
 import java.util.Set;
 
+import zui.checkers.GUI;
 import zui.checkers.Game;
 import zui.checkers.game.Move;
 import zui.checkers.pieces.Piece;
@@ -74,4 +75,18 @@ public abstract class Agent {
     public final int getScore() {
     	return getPieces().size() - getOpponentPieces().size();
     }
+    
+    public Game getGame() {
+    	return game;
+    }
+
+	public Move getNextMove() {
+    	return nextMove;
+    }
+
+	public void setNextMove(Move nextMove) {
+    	this.nextMove = nextMove;
+    }
+    
+    
 }

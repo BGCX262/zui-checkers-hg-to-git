@@ -1,6 +1,9 @@
 package zui.checkers.agents;
 
+import javax.swing.JPanel;
+
 import zui.checkers.Game;
+import zui.checkers.game.BoardMouseListener;
 import zui.checkers.game.Move;
 
 public class HumanAgent extends Agent {
@@ -12,6 +15,15 @@ public class HumanAgent extends Agent {
 
     @Override
     public Move act() {
+    	JPanel canvas = getGame().getGui().getBoard();
+    	
+    	canvas.addMouseListener(new BoardMouseListener(getGame(), this));
+    	
+    	try{
+    		wait();
+    	}catch (Exception e) {
+			throw new AssertionError("Wait interupted!");
+		}
         return null;
     }
 

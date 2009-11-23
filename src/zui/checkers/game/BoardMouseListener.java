@@ -7,6 +7,8 @@ import java.util.Set;
 
 import zui.checkers.GUI;
 import zui.checkers.Game;
+import zui.checkers.agents.Agent;
+import zui.checkers.agents.HumanAgent;
 import zui.checkers.pieces.Map;
 import zui.checkers.pieces.Piece;
 
@@ -15,6 +17,8 @@ public class BoardMouseListener implements MouseListener {
 	private Game game;
 	
 	private Piece selectedPiece;
+	
+	private Agent agent;
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -29,7 +33,13 @@ public class BoardMouseListener implements MouseListener {
 				Move m = getMove(x, y);
 				System.out.println("selected move: "+m);
 				if(m != null) {
-					game.doMove(m);
+					if(agent == null) {
+						//TODO odstranit tuto vetvu ked budu rozbehnute thready!
+						game.doMove(m);
+					}else{
+						agent.setNextMove(m);
+						agent.notify();
+					}
 					selectedPiece = null;
 				}
 				
@@ -84,6 +94,12 @@ public class BoardMouseListener implements MouseListener {
 		this.game = game;
 	}
 	
+	public BoardMouseListener(Game game, HumanAgent humanAgent) {
+		super();
+		this.game = game;
+		this.agent = humanAgent;
+    }
+
 	private Move getMove(int x, int y) {
 		
 		for(Iterator<Move> i = selectedPiece.getValidSteps().iterator();i.hasNext();) {

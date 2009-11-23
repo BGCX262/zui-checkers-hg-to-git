@@ -1,5 +1,7 @@
 package zui.checkers;
 
+import javax.swing.JPanel;
+
 /**
  *
  * @author miso, lukas
@@ -19,5 +21,7 @@ public interface GUI {
      * Prekresli/updatne hraciu plochu.
      */
     void repaintBoard();
+    
+    JPanel getBoard();
 
 }

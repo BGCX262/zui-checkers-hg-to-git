@@ -307,4 +307,9 @@ public class MainFrame extends javax.swing.JFrame implements GUI {
     private javax.swing.JLabel msgLabel;
     // End of variables declaration//GEN-END:variables
 
+	@Override
+    public JPanel getBoard() {
+	    return boardCanvas;
+    }
+
 }
