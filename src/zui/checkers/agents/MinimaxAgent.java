@@ -37,9 +37,16 @@ public class MinimaxAgent extends Agent {
     		return getScore();
     	}
     	
+    	Agent player = p.getAgent().getOpponent();
     	int score = 0;
-    	for(Iterator<Move> i = p.getAgent().getOpponent().getAllMoves().iterator(); i.hasNext();){
+    	for(Iterator<Move> i = player.getAllMoves().iterator(); i.hasNext();){
     		Move move = i.next();
+    		
+    		if(player.equals(this)) { // max
+    			
+    		}else{ //min
+    			
+    		}
     		score = playGame(m);
     	}
     	return 0;
