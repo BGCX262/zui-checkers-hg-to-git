@@ -200,10 +200,7 @@ public class MainFrame extends javax.swing.JFrame implements GUI {
             agent02Slider.setEnabled(true);
             
             game.stopAndDestroy();
-            MouseListener[] mls =getMouseListeners();
-        	for(int i = 0; i < mls.length; i++) {
-        		removeMouseListener(mls[i]);
-        	}
+            
             game = null;
             boardCanvas.repaint();
         }

@@ -1,5 +1,7 @@
 package zui.checkers;
 
+import java.awt.event.MouseListener;
+
 import zui.checkers.agents.ABCutAgent;
 import zui.checkers.agents.Agent;
 import zui.checkers.agents.CutOffSearchAgent;
@@ -146,6 +148,13 @@ public class Game {
     
     public GUI getGui() {
     	return gui;
+    }
+    
+    public void removeBoardListener() {
+    	MouseListener[] mls = gui.getBoard().getMouseListeners();
+    	for(int i = 0; i < mls.length; i++) {
+    		gui.getBoard().removeMouseListener(mls[i]);
+    	}
     }
 
 }

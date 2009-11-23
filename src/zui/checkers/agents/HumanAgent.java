@@ -15,16 +15,22 @@ public class HumanAgent extends Agent {
 
     @Override
     public Move act() {
-    	JPanel canvas = getGame().getGui().getBoard();
-    	
-    	canvas.addMouseListener(new BoardMouseListener(getGame(), this));
+    	setMouseListener();
     	
     	try{
     		wait();
     	}catch (Exception e) {
 			throw new AssertionError("Wait interupted!");
 		}
-        return null;
+    	
+        return getNextMove();
+    }
+    
+    private void setMouseListener() {
+    	getGame().removeBoardListener();
+    	
+    	JPanel canvas = getGame().getGui().getBoard();
+    	canvas.addMouseListener(new BoardMouseListener(getGame(), this));
     }
 
 }
