@@ -39,7 +39,7 @@ public class Move {
      * @param y y-ova suradnica tahu
      * @param tmp <tt>true</tt> ak tento tah nie je definitivnym
      * rozhodnutim agenta, t.z. ze sa este moze zmenit.
-     * @param strickenPieces 
+     * @param strickenPieces preskocene figurky
      */
 	public Move(Piece piece, int x, int y, boolean tmp, int score,
 	        Piece strickenPiece) {

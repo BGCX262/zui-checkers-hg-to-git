@@ -34,6 +34,11 @@ public class Game {
     
     private Agent agentOnTurn = null;
     
+    /** Roznodnutie hraca (priebezne/definitivne), ktory je prave na tahu. */
+    private Move agentOnTurnMove = null;
+    
+    private Thread checkersControllerThread;
+    
     private Map map;
     
     private GUI gui;
@@ -96,7 +101,8 @@ public class Game {
             agentOnTurn = agent01;
             gui.setAgentOnTurnHighlighted(getAgentOnTurnId());
             gui.repaintBoard();
-            // TODO: 
+            checkersControllerThread = new CheckersControllerThread();
+            checkersControllerThread.start();
         }
     }
     
@@ -105,6 +111,9 @@ public class Game {
         // agent01.destroy();
         // agent02.destroy();
         // map.destroy();
+        // ...
+        checkersControllerThread.interrupt();
+        checkersControllerThread = null;
     }
     
     public Agent getAgentOnTurn() {
@@ -138,10 +147,10 @@ public class Game {
     	
     	gui.repaintBoard();
     	
-    	switchAgent();
+    	setNextAgentOnTurn();
     }
     
-    private void switchAgent() {
+    private void setNextAgentOnTurn() {
     	agentOnTurn = getOpponent(getAgentOnTurn());
     	gui.setAgentOnTurnHighlighted(getAgentOnTurnId());
     }
@@ -172,6 +181,75 @@ public class Game {
     	}
     	
     	return true;
+    }
+    
+    class CheckersControllerThread extends Thread {
+        
+        public CheckersControllerThread() {
+            super("CheckersController");
+        }
+        
+        @Override
+        public void run() {
+            Thread actThread;
+            while (true/** nie je koniec hry */) {
+                agentOnTurnMove = null;
+                actThread = new CheckersControllerActThread();
+                actThread.start();
+                try {
+                    // pockame na agenta
+                    if (agentOnTurn.getTimeToThink() == -1) {
+                        // agent ma na rozmyslanie neobmedzeny cas
+                        actThread.join();
+                    } else {
+                        // agent ma na rozmyslanie presne stanoveny limit
+                        actThread.join(agentOnTurn.getTimeToThink());
+                    }
+                } catch (InterruptedException e) {
+                    // Tento thread moze byt preruseny pri stopnuty hry, nie je to chyba.
+                    // Stiahneme so sebou aj "act" thread.
+                    actThread.interrupt();
+                }
+                if (agentOnTurnMove == null) {
+                    // agent sa nijako nerozhodol, jeho tah prepada v prospech supera
+                    setNextAgentOnTurn();
+                } else {
+                    // TODO pohnut panacikom tak ako si to agent zela - agentOnTurnMove
+                    setNextAgentOnTurn();
+                }
+            }
+            
+        }
+        
+    }
+    
+    /**
+     * Thread, ktory ma nastarosti volanie metody <tt>act()</tt> agenta, ktory
+     * je prave na tahu.
+     * 
+     * Thread, ktory ma nastarosti volanie lifecycle (turncycle ;-) ) metody
+     * agenta. Tymito metodami su {@link Agent#act()} a {@link Agent#doTurnCleanup()}.
+     * @author miso
+     *
+     */
+    class CheckersControllerActThread extends Thread {
+        
+        public CheckersControllerActThread() {
+            super("CheckersControllers-act");
+        }
+        
+        @Override
+        public void run() {
+            while (true) {
+                agentOnTurnMove = agentOnTurn.act();
+                if (agentOnTurnMove == null) {
+                    break;
+                } else if (agentOnTurnMove.tmp) {
+                    continue;
+                }
+            }
+        }
+        
     }
 
 }

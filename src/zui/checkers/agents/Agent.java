@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import zui.checkers.GUI;
 import zui.checkers.Game;
 import zui.checkers.game.Move;
 import zui.checkers.pieces.Piece;
@@ -74,12 +73,28 @@ public abstract class Agent {
      */
     public abstract Move act();
     
+    /**
+     * Tato metoda je volana tesne po vrateni sa z metody <tt>act()</tt> a zaroven
+     * tesne pred tym, ako sa dostane na tah novy hrac.
+     * Agent si moze vo volani tejto metody urobit poriadok a pripravit sa tak
+     * na buduce volania metody <tt>act()</tt>.
+     */
+    public void doTurnCleanup() {
+    }
+    
     public final int getScore() {
     	return getPieces().size() - getOpponentPieces().size();
     }
     
     public Game getGame() {
     	return game;
+    }
+    
+    /**
+     * @return Cas, ktory ma agent na rozmyslenie si svojho tahu v milisekundach.
+     */
+    public int getTimeToThink() {
+        return timeToThink;
     }
 
 	public Move getNextMove() {

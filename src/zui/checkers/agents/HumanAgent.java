@@ -8,14 +8,13 @@ import zui.checkers.game.Move;
 
 public class HumanAgent extends Agent {
 	
-
     public HumanAgent(Game game, int timeToThink, int attackDir) {
         super(game, timeToThink, attackDir);
     }
 
     @Override
     public Move act() {
-    	setMouseListener();
+    	addMouseListener();
     	
     	try{
     		wait();
@@ -26,7 +25,7 @@ public class HumanAgent extends Agent {
         return getNextMove();
     }
     
-    private void setMouseListener() {
+    private void addMouseListener() {
     	getGame().removeBoardListener();
     	
     	JPanel canvas = getGame().getGui().getBoard();
