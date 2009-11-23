@@ -1,5 +1,7 @@
 package zui.checkers.agents;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import zui.checkers.GUI;
@@ -88,5 +90,25 @@ public abstract class Agent {
     	this.nextMove = nextMove;
     }
     
+	protected Set<Move> getAllMoves() {
+		Set<Move> buff = new HashSet<Move>();
+		for( Iterator<Piece> i = getPieces().iterator(); i.hasNext();) {
+			Piece p = i.next();
+			buff.addAll(p.getValidSteps());
+		}
+		
+		return buff;
+	}
     
+	public boolean hasMoves() {
+		for( Iterator<Piece> i = getPieces().iterator(); i.hasNext();) {
+			Piece p = i.next();
+			if (p.getValidSteps().size() > 0) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 }

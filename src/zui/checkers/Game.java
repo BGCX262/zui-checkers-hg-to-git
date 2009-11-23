@@ -156,5 +156,22 @@ public class Game {
     		gui.getBoard().removeMouseListener(mls[i]);
     	}
     }
+    
+    public boolean isEnd() {
+    	if(agent01 == null || agent02 == null) {
+    		return true;
+    	}
+    	
+    	if (agent01.getPieces().size() == 0 || 
+    			agent02.getPieces().size() == 0) {
+    		return true;
+    	}
+    	
+    	if(agentOnTurn.hasMoves()) {
+    		return false;
+    	}
+    	
+    	return true;
+    }
 
 }
