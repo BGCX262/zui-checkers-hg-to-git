@@ -6,6 +6,7 @@ import com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl;
 
 import zui.checkers.Game;
 import zui.checkers.game.Move;
+import zui.checkers.pieces.Piece;
 
 public class MinimaxAgent extends Agent {
 
@@ -29,7 +30,18 @@ public class MinimaxAgent extends Agent {
     }
     
     private int playGame(Move m) {
+    	Piece p = m.piece;
+    	p.doMove(m);
     	
+    	if(getGame().isEnd()) {
+    		return getScore();
+    	}
+    	
+    	int score = 0;
+    	for(Iterator<Move> i = p.getAgent().getOpponent().getAllMoves().iterator(); i.hasNext();){
+    		Move move = i.next();
+    		score = playGame(m);
+    	}
     	return 0;
     }
 
