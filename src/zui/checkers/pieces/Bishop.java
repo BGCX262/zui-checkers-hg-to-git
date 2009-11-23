@@ -35,25 +35,25 @@ public class Bishop extends Piece {
 	public Set<Move> getValidSteps( ) {
 		Set<Move> moves = new HashSet();
 
-		moves = getValidStepsRecursively(false);
+		moves = getValidStepsRecursively(false,0);
 		
 		return moves;
 	}
 	
-	private Set<Move> getValidStepsRecursively(boolean onlyScore) {
+	private Set<Move> getValidStepsRecursively(boolean onlyScore, int score) {
 		Set<Move> moves = new HashSet();
 		
 		Move mr = getValid(getRDiagonal(), false, onlyScore);
 		Move ml = getValid(getLDiagonal(), true, onlyScore);
 		
-		getNextMoves(mr, moves);
-		getNextMoves(ml, moves);
+		getNextMoves(mr, moves, score);
+		getNextMoves(ml, moves, score);
 		
 		return moves;
 	}
 	
 	
-	private void getNextMoves(Move ml,  Set<Move> moves) {
+	private void getNextMoves(Move ml,  Set<Move> moves, int score) {
 //		Set<Move> buffMoves = new HashSet<Move>();
 		if(ml != null) {
 			moves.add(ml);
@@ -62,7 +62,7 @@ public class Bishop extends Piece {
 				
 				doMove(ml);
 
-				moves.addAll(getValidStepsRecursively(true));
+				moves.addAll(getValidStepsRecursively(true, (score + 1)));
 				
 				// krok spat
 				doMove(new Move(this, tmpPiece.getX(), tmpPiece.getY(), true, 0));
