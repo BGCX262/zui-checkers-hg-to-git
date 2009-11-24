@@ -144,7 +144,7 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-    protected Piece clone(){
+    public Piece clone(){
 	    Bishop b = new Bishop(this.getAgent());
 	    b.setX(getX());
 	    b.setY(getY());

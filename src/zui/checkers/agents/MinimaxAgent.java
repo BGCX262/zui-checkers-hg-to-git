@@ -58,9 +58,12 @@ public class MinimaxAgent extends Agent {
     
     private int playGame(Move m) {
     	Piece p = m.piece;
+    	Piece tmpPiece = p.clone();
     	p.doMove(m);
     	
-    	if(getGame().isEnd()) { //koniec rekurzie
+    	if(/*getGame().isEnd()*/ p.getAgent().hasMoves()) { //koniec rekurzie
+    		// krok spat
+			p.doReverseMove(p, m, tmpPiece);
     		return getScore();
     	}
     	
@@ -81,7 +84,7 @@ public class MinimaxAgent extends Agent {
     		}
     		
     	}
-    	
+    	p.doReverseMove(p, m, tmpPiece);
     	return score;
     }
 
@@ -91,13 +94,13 @@ public class MinimaxAgent extends Agent {
 	    allMoves = null;
 	    
 	    // vratit klonovanu mapu naspat
-	    getGame().setMap(getTmpMap());
+//	    getGame().setMap(getTmpMap());
     }
 
 	@Override
     public void doBeforeAct() {
 	    super.doBeforeAct();
-	    setTmpMap(getGame().getMap().clone());
+//	    setTmpMap(getGame().getMap().clone());
     }
     
     
