@@ -94,7 +94,7 @@ public abstract class Piece {
     
     public void doMove(Move move) {
     	map.removePiece(this);
-    	move.removePiecesOnMove(map);
+    	move.removeStrickenPieces(map);
     	map.setPiece(move.x, move.y, this);
     }
     

@@ -35,7 +35,9 @@ public class Game {
     /** Roznodnutie hraca (priebezne/definitivne), ktory je prave na tahu. */
     private Move agentOnTurnMove = null;
     
-    private Thread checkersControllerThread;
+    private Thread controllerThread;
+    
+    private Thread actThread;
     
     private Map map;
     
@@ -99,19 +101,21 @@ public class Game {
             agentOnTurn = agent01;
             gui.setAgentOnTurnHighlighted(getAgentOnTurnId());
             gui.repaintBoard();
-            checkersControllerThread = new CheckersControllerThread();
-            checkersControllerThread.start();
+            controllerThread = new CheckersControllerThread();
+            controllerThread.start();
         }
     }
     
     public void stopAndDestroy() {
-        // TODO do mem cleanup
-        // agent01.destroy();
-        // agent02.destroy();
-        // map.destroy();
-        // ...
-        checkersControllerThread.interrupt();
-        checkersControllerThread = null;
+        if (controllerThread!=null) {
+            controllerThread.interrupt();
+        }
+        if (actThread!=null && agentOnTurn!=null) {
+            agentOnTurn.doTurnCleanup();
+            actThread.interrupt();
+        }
+        controllerThread = null;
+        actThread = null;
     }
     
     public synchronized Agent getAgentOnTurn() {
@@ -182,7 +186,6 @@ public class Game {
         
         @Override
         public void run() {
-            Thread actThread;
             while ( true /** nie je koniec hry */) {
                 actThread = new CheckersControllerActThread();
                 actThread.start();
@@ -246,12 +249,17 @@ public class Game {
                 if (agentOnTurnMove == null) {
                     System.out.println("act - no move computed");
                     break;
-                } else if (agentOnTurnMove.isTemporary()) {
-                    System.out.println("act - move is temporary");
-                    continue;
                 } else {
-                    System.out.println("act - move is definitive decision");
-                    break;
+                    Move tmp = agentOnTurnMove;
+                    Piece piece = getMap().getPieceAt(tmp.piece.getX(), tmp.piece.getY());
+                    agentOnTurnMove = new Move(piece, tmp.x, tmp.y, tmp.isTemporary(), tmp.score, tmp.strickenPiece);
+                    if (agentOnTurnMove.isTemporary()) {
+                        System.out.println("act - move is temporary");
+                        continue;
+                    } else {
+                        System.out.println("act - move is definitive decision");
+                        break;
+                    }
                 }
             }
             System.out.println("act - agent "+ getAgentOnTurnId() +" finished acting");

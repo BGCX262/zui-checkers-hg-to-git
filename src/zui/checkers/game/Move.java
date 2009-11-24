@@ -17,6 +17,7 @@ import zui.checkers.pieces.Piece;
 public class Move {
 
     public final Piece piece;
+    
     private Move ancestorMove;
     
     /**
@@ -30,8 +31,8 @@ public class Move {
     public final int y;
     
     public final Piece strickenPiece;
-	public int score;
     
+	public int score;
     
     /**
      * @param piece Figurka, ktoru chceme tahat.
@@ -97,7 +98,7 @@ public class Move {
 		return buff;
     }
 	
-	public void removePiecesOnMove(Map map) {
+	public void removeStrickenPieces() {
 		Set<Piece> buffStrickenPieces =  getStrickenPieces(); 
 		if(buffStrickenPieces.size() == 0) {
 			return ;
@@ -105,7 +106,7 @@ public class Move {
 		
 		for(Iterator<Piece> i = buffStrickenPieces.iterator(); i.hasNext();) {
 			Piece p = i.next();
-			map.removePiece(p);
+			piece.getAgent().getGame().getMap().removePiece(p);
 		}
 	}
 	
