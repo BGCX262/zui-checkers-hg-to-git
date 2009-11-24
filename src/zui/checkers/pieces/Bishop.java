@@ -116,6 +116,10 @@ public class Bishop extends Piece {
 					return null;
 				}
 				
+				if(strickenPiece!=null && score == 1) {
+					return null;
+				}
+				
 				strickenPiece =  piece;
 				
 				score++;

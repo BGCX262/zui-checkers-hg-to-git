@@ -73,8 +73,8 @@ public class Game {
             map.setPiece(8, 8, new Bishop(agent02));
             
             //TODO debugovanie preskocenia, odstranit neskor!
-//            map.setPiece(3, 3, new Bishop(agent02));
-//            map.setPiece(3, 5, new Bishop(agent02));
+            map.setPiece(5, 3, new Bishop(agent02));
+            map.setPiece(4, 4, new Bishop(agent02));
         } else {
             throw new IllegalArgumentException("Hrac cislo " + agentId + " nie je validnym hracom.");
         }

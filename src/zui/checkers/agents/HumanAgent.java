@@ -88,6 +88,7 @@ public class HumanAgent extends Agent implements MouseListener {
     private Move getMove(int x, int y) {
         for(Iterator<Move> i = selectedPiece.getValidSteps().iterator();i.hasNext();) {
             Move m = i.next();
+            System.out.println("valid step: "+m.toString());
             if( m.x == x && m.y == y) {
                 return m;
             }
