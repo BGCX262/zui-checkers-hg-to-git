@@ -4,8 +4,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -16,7 +14,6 @@ import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import zui.checkers.game.BoardMouseListener;
 import zui.checkers.pieces.Map;
 import zui.checkers.pieces.Piece;
 
@@ -191,7 +188,6 @@ public class MainFrame extends javax.swing.JFrame implements GUI {
             game.initAgent(1, agent01Combo.getSelectedIndex(), 1, getTimeLimitMillis(agent01Slider));
             game.initAgent(2, agent02Combo.getSelectedIndex(), -1, getTimeLimitMillis(agent02Slider));
             game.start();
-            boardCanvas.addMouseListener(new BoardMouseListener(game));
         } else {
             gameButton.setText(START_GAME);
             agent01Combo.setEnabled(true);

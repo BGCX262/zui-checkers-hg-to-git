@@ -1,7 +1,5 @@
 package zui.checkers;
 
-import java.awt.event.MouseListener;
-
 import zui.checkers.agents.ABCutAgent;
 import zui.checkers.agents.Agent;
 import zui.checkers.agents.CutOffSearchAgent;
@@ -116,11 +114,11 @@ public class Game {
         checkersControllerThread = null;
     }
     
-    public Agent getAgentOnTurn() {
+    public synchronized Agent getAgentOnTurn() {
         return agentOnTurn;
     }
     
-    public int getAgentOnTurnId() {
+    public synchronized int getAgentOnTurnId() {
         if (agentOnTurn == null) {
             return -1;
         } else if (agent01 == agentOnTurn) {
@@ -142,28 +140,21 @@ public class Game {
     }
     
     public void doMove(Move m) {
+        System.out.println("game - doing move " + m);
     	Piece p = m.piece;
     	p.doMove(m);
-    	
     	gui.repaintBoard();
-    	
-    	setNextAgentOnTurn();
     }
     
-    private void setNextAgentOnTurn() {
+    private synchronized void setNextAgentOnTurn() {
+        agentOnTurnMove = null;
     	agentOnTurn = getOpponent(getAgentOnTurn());
     	gui.setAgentOnTurnHighlighted(getAgentOnTurnId());
+    	System.out.println("game - agent " + getAgentOnTurnId() + " is on turn");
     }
     
     public GUI getGui() {
     	return gui;
-    }
-    
-    public void removeBoardListener() {
-    	MouseListener[] mls = gui.getBoard().getMouseListeners();
-    	for(int i = 0; i < mls.length; i++) {
-    		gui.getBoard().removeMouseListener(mls[i]);
-    	}
     }
     
     public boolean isEnd() {
@@ -193,11 +184,11 @@ public class Game {
         public void run() {
             Thread actThread;
             while (true/** nie je koniec hry */) {
-                agentOnTurnMove = null;
                 actThread = new CheckersControllerActThread();
                 actThread.start();
                 try {
                     // pockame na agenta
+                    System.out.println("game - waiting for act() to finish");
                     if (agentOnTurn.getTimeToThink() == -1) {
                         // agent ma na rozmyslanie neobmedzeny cas
                         actThread.join();
@@ -207,14 +198,23 @@ public class Game {
                     }
                 } catch (InterruptedException e) {
                     // Tento thread moze byt preruseny pri stopnuty hry, nie je to chyba.
-                    // Stiahneme so sebou aj "act" thread.
-                    actThread.interrupt();
+                    // TODO Pri stopnuti hry korektne stiahnut so sebou aj actThread.
                 }
+
+                // Dame threadu moznost urobit cleanup. V tomto case sa agent moze nachadzat
+                // v dvoch stavoch:
+                // 1) vratil z metody act() a dopocital sa k svojmu konecnemu/definitivnemu tahu
+                // 2) agent este stale pocita, agent zatial nevratil ziadny konecny vysledok
+                // V oboch pripadoch je korektne agenta najprv upozornit, ze jeho tah sa skoncil
+                // a nasledne prerusit jeho thread.
+                agentOnTurn.doTurnCleanup();
+                actThread.interrupt();
+                
+                System.out.println("game - act() finished with value " + agentOnTurnMove);
                 if (agentOnTurnMove == null) {
-                    // agent sa nijako nerozhodol, jeho tah prepada v prospech supera
-                    setNextAgentOnTurn();
+                    setNextAgentOnTurn();   // agent sa nijako nerozhodol, jeho tah prepada
                 } else {
-                    // TODO pohnut panacikom tak ako si to agent zela - agentOnTurnMove
+                    doMove(agentOnTurnMove);
                     setNextAgentOnTurn();
                 }
             }
@@ -235,7 +235,7 @@ public class Game {
     class CheckersControllerActThread extends Thread {
         
         public CheckersControllerActThread() {
-            super("CheckersControllers-act");
+            super("CheckersController-act");
         }
         
         @Override
@@ -243,11 +243,17 @@ public class Game {
             while (true) {
                 agentOnTurnMove = agentOnTurn.act();
                 if (agentOnTurnMove == null) {
+                    System.out.println("act - no move computed");
                     break;
-                } else if (agentOnTurnMove.tmp) {
+                } else if (agentOnTurnMove.isTemporary()) {
+                    System.out.println("act - move is temporary");
                     continue;
+                } else {
+                    System.out.println("act - move is definitive decision");
+                    break;
                 }
             }
+            System.out.println("act - agent "+ getAgentOnTurnId() +" finished acting");
         }
         
     }

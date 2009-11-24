@@ -23,7 +23,7 @@ public class Move {
     * <tt>true</tt> ak tento tah nie je definitivnym
     * rozhodnutim agenta, t.z. ze sa este moze zmenit.
     */
-    public final boolean tmp;
+    private boolean tmp;
     
     public final int x;
     
@@ -53,9 +53,16 @@ public class Move {
 
 	@Override
     public String toString() {
-
 	    return "["+x+","+y+"], "+score;
     }
+	
+	public void setTemporary(boolean tmp) {
+	    this.tmp = tmp;
+	}
+	
+	public boolean isTemporary() {
+	    return tmp;
+	}
 	
 	public void setAncestorMove(Move m) {
 		ancestorMove = m;

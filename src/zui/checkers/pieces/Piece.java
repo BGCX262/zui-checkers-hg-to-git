@@ -96,7 +96,6 @@ public abstract class Piece {
     	map.removePiece(this);
     	move.removePiecesOnMove(map);
     	map.setPiece(move.x, move.y, this);
-    	
     }
     
     public void doReverseMove(Piece actualPiece, Move ml, Piece tmpPiece) {

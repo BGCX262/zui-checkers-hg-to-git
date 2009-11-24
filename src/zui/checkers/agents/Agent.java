@@ -20,8 +20,6 @@ public abstract class Agent {
     
     private final Game game;
     
-    private Move nextMove;
-    
     /**
      * @param game Hra, ktoru tento hrac bude hrat.
      * @param timeToThink Casovy limit, ktory ma tento hrac na premyslenie tahu. <tt>-1</tt>
@@ -97,14 +95,6 @@ public abstract class Agent {
         return timeToThink;
     }
 
-	public Move getNextMove() {
-    	return nextMove;
-    }
-
-	public void setNextMove(Move nextMove) {
-    	this.nextMove = nextMove;
-    }
-    
 	protected Set<Move> getAllMoves() {
 		Set<Move> buff = new HashSet<Move>();
 		for( Iterator<Piece> i = getPieces().iterator(); i.hasNext();) {
