@@ -26,8 +26,10 @@ public class MinimaxAgent extends Agent {
     		//TODO dorobit clonovanie mapy
     		
     		allMoves = getAllMoves();
-    		moveToCompute = allMoves.iterator();
-    		setNextMove(allMoves.iterator().next());
+    		if( allMoves != null) {
+	    		moveToCompute = allMoves.iterator();
+	    		setNextMove(allMoves.iterator().next());
+    		}
     		
     		// vratim prvy mozny tah, je to robene takto aby som si neposunul povodny iterator
     		return getNextMove();
@@ -62,16 +64,16 @@ public class MinimaxAgent extends Agent {
     	p.doMove(m);
     	
     	
-    	Thread actThread = Thread.currentThread();
-    	try{
-    		getGame().getGui().repaintBoard();
-    		actThread.sleep(500);
-    		
-    	}catch (Exception e) {
-			// TODO: handle exception
-		}
+//    	Thread actThread = Thread.currentThread();
+//    	try{
+//    		getGame().getGui().repaintBoard();
+//    		actThread.sleep(1);
+//    		
+//    	}catch (Exception e) {
+//			throw new AssertionError(e.getMessage());
+//		}
     	
-    	if(/*getGame().isEnd()*/ p.getAgent().hasMoves()) { //koniec rekurzie
+    	if(/*getGame().isEnd()*/ !p.getAgent().hasMoves()) { //koniec rekurzie
     		// krok spat
 			p.doReverseMove(p, m, tmpPiece);
     		return getScore();

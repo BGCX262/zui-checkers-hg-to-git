@@ -253,6 +253,7 @@ public class Game {
                     Move tmp = agentOnTurnMove;
                     Piece piece = getMap().getPieceAt(tmp.piece.getX(), tmp.piece.getY());
                     agentOnTurnMove = new Move(piece, tmp.x, tmp.y, tmp.isTemporary(), tmp.score, tmp.strickenPiece);
+                    agentOnTurnMove.setAncestorMove(tmp.getAncestorMove());
                     if (agentOnTurnMove.isTemporary()) {
                         System.out.println("act - move is temporary");
                         continue;
