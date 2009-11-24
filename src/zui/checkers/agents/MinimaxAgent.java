@@ -61,6 +61,16 @@ public class MinimaxAgent extends Agent {
     	Piece tmpPiece = p.clone();
     	p.doMove(m);
     	
+    	
+    	Thread actThread = Thread.currentThread();
+    	try{
+    		getGame().getGui().repaintBoard();
+    		actThread.sleep(500);
+    		
+    	}catch (Exception e) {
+			// TODO: handle exception
+		}
+    	
     	if(/*getGame().isEnd()*/ p.getAgent().hasMoves()) { //koniec rekurzie
     		// krok spat
 			p.doReverseMove(p, m, tmpPiece);
