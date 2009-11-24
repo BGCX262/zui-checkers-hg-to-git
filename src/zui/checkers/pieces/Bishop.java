@@ -144,13 +144,19 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-    protected Bishop clone(){
+    protected Piece clone(){
 	    Bishop b = new Bishop(this.getAgent());
 	    b.setX(getX());
 	    b.setY(getY());
 	    b.setMap(getMap());
 	    return b;
     }
+	
+	public Piece clone(Map m) {
+		Piece b = clone();
+		b.setMap(m);
+		return b;
+	}
 	
 	
 

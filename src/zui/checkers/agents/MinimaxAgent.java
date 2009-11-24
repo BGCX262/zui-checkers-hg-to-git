@@ -40,19 +40,17 @@ public class MinimaxAgent extends Agent {
     }
     
     private Move getBestMove() {
+    	Move m;
     	if(moveToCompute.hasNext()) {
-    		Move m = moveToCompute.next();
+    		m = moveToCompute.next();
     		int score = playGame(m);
     		if(score > getNextMove().score) {
         		setNextMove(m);
         	}
     	}else{
-    		//TODO dosli mi moznosti, musim dat vediet ze moze ist dalsi
-    		Thread actThread = Thread.currentThread();
-    		synchronized(actThread) {
-                actThread.notifyAll();
-            }
-    		
+    		// dosli mi moznosti, musim dat vediet ze moze ist dalsi
+    		m = getNextMove();
+    		m.setTemporary(false);
     	}
     	
     	return getNextMove();
@@ -62,21 +60,21 @@ public class MinimaxAgent extends Agent {
     	Piece p = m.piece;
     	p.doMove(m);
     	
-    	if(getGame().isEnd()) {
+    	if(getGame().isEnd()) { //koniec rekurzie
     		return getScore();
     	}
     	
-    	Agent player = p.getAgent().getOpponent();
+    	Agent player = p.getAgent().getOpponent(); // vymenim hracov
     	int score = 0;
-    	for(Iterator<Move> i = player.getAllMoves().iterator(); i.hasNext();){
+    	for(Iterator<Move> i = player.getAllMoves().iterator(); i.hasNext();){ // prejdem hracove moznosti
     		Move move = i.next();
     		int playedScore = playGame(m);
     		
-    		if(player == this ) { // max
+    		if(player == this ) { // ak robim tah ja hladam maximum
     			if(score < playedScore ) {
     				score = playedScore;
     			}
-    		}else{ //min
+    		}else{ // ak robi tah super hladam minimum
     			if(score > playedScore ) {
     				score = playedScore;
     			}
@@ -92,7 +90,14 @@ public class MinimaxAgent extends Agent {
 	    super.doTurnCleanup();
 	    allMoves = null;
 	    
-	    //TODO vratit klonovanu mapu naspat
+	    // vratit klonovanu mapu naspat
+	    getGame().setMap(getTmpMap());
+    }
+
+	@Override
+    public void doBeforeAct() {
+	    super.doBeforeAct();
+	    setTmpMap(getGame().getMap().clone());
     }
     
     

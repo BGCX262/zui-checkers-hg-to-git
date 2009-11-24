@@ -176,8 +176,16 @@ public class Map {
 
 		try{
 			Map m = new Map();
-			m.setlDiagonals(lDiagonals);
-			m.setrDiagonals(rDiagonals);
+			List<List<Piece>> ld = m.getlDiagonals();
+			for(int i = 0; i < lDiagonals.size(); i++) {
+				for(int j = 0; j < lDiagonals.get(i).size(); j++) {
+					Piece cp = lDiagonals.get(i).get(j);
+					if(cp != null) {
+						m.setPiece(cp.getX(), cp.getY(), cp.clone(m));
+					}
+				}
+			}
+			
 			return m;
 		}catch (Exception e) {
 			new AssertionError("Clone not supported for "+getClass().getName());

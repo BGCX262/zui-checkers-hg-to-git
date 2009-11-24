@@ -6,6 +6,7 @@ import java.util.Set;
 
 import zui.checkers.Game;
 import zui.checkers.game.Move;
+import zui.checkers.pieces.Map;
 import zui.checkers.pieces.Piece;
 
 public abstract class Agent {
@@ -21,6 +22,8 @@ public abstract class Agent {
     private final Game game;
     
     private Move nextMove;
+    
+    private Map tmpMap;
     
     /**
      * @param game Hra, ktoru tento hrac bude hrat.
@@ -82,6 +85,12 @@ public abstract class Agent {
     public void doTurnCleanup() {
     }
     
+    /**
+     * Zavola sa ked na agenta prisiel rad, napriklad na uchovanie povodnej mapy
+     */
+    public void doBeforeAct() {
+    }
+    
     public final int getScore() {
     	return getPieces().size() - getOpponentPieces().size();
     }
@@ -126,6 +135,14 @@ public abstract class Agent {
 		//musim nastavit score hry, nie skore skoku
 		nextMove.score = getScore();
     	this.nextMove = nextMove;
+    }
+
+	public Map getTmpMap() {
+    	return tmpMap;
+    }
+
+	public void setTmpMap(Map tmpMap) {
+    	this.tmpMap = tmpMap;
     }
 
 }

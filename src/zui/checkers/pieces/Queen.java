@@ -29,6 +29,18 @@ public class Queen extends Piece {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+    public Piece clone() {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
+
+	@Override
+    public Piece clone(Map m) {
+	    // TODO Auto-generated method stub
+	    return null;
+    }
     
     
 

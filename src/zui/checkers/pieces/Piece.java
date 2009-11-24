@@ -112,5 +112,9 @@ public abstract class Piece {
      * @return mnozina moznych pohybov
      */
     public abstract Set<Move> getValidSteps();
-    
+
+	@Override
+    protected abstract Piece clone();
+	
+	public abstract Piece clone(Map m);
 }

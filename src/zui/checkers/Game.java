@@ -71,8 +71,8 @@ public class Game {
             map.setPiece(8, 8, new Bishop(agent02));
             
             //TODO debugovanie preskocenia, odstranit neskor!
-            map.setPiece(3, 3, new Bishop(agent02));
-            map.setPiece(3, 5, new Bishop(agent02));
+//            map.setPiece(3, 3, new Bishop(agent02));
+//            map.setPiece(3, 5, new Bishop(agent02));
         } else {
             throw new IllegalArgumentException("Hrac cislo " + agentId + " nie je validnym hracom.");
         }
@@ -240,6 +240,7 @@ public class Game {
         
         @Override
         public void run() {
+        	agentOnTurn.doBeforeAct();
             while (true) {
                 agentOnTurnMove = agentOnTurn.act();
                 if (agentOnTurnMove == null) {
@@ -256,6 +257,10 @@ public class Game {
             System.out.println("act - agent "+ getAgentOnTurnId() +" finished acting");
         }
         
+    }
+
+	public void setMap(Map map) {
+    	this.map = map;
     }
 
 }
