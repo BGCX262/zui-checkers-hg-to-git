@@ -116,6 +116,10 @@ public class Bishop extends Piece {
 					return null;
 				}
 				
+				if(strickenPiece!=null && score == 1) {
+					return null;
+				}
+				
 				strickenPiece =  piece;
 				
 				score++;
@@ -144,7 +148,7 @@ public class Bishop extends Piece {
 	}
 
 	@Override
-    protected Piece clone(){
+    public Piece clone(){
 	    Bishop b = new Bishop(this.getAgent());
 	    b.setX(getX());
 	    b.setY(getY());

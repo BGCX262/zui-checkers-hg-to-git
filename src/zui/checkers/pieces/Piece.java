@@ -114,7 +114,8 @@ public abstract class Piece {
     public abstract Set<Move> getValidSteps();
 
 	@Override
-    protected abstract Piece clone();
+    public
+    abstract Piece clone();
 	
 	public abstract Piece clone(Map m);
 }
