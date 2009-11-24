@@ -30,7 +30,7 @@ public class Move {
     public final int y;
     
     public final Piece strickenPiece;
-	public final int score;
+	public int score;
     
     
     /**

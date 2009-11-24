@@ -138,13 +138,15 @@ public class Map {
      * danemu hracovi.
      */
     public Set<Piece> getPieces(Agent agent) {
-        Set<Piece> agentsPieces = new HashSet<Piece>(8);
+        Set<Piece> agentsPieces = new HashSet<Piece>();
         for (int i = 0; i<rDiagonals.size(); i++) {
             List<Piece> diag = rDiagonals.get(i);
             for (int j = 0; j<diag.size(); j++) {
-                if (diag.get(j).getAgent() == agent) {
-                    agentsPieces.add(diag.get(j));
-                }
+            	if(diag.get(j) != null) {
+	                if (diag.get(j).getAgent() == agent) {
+	                    agentsPieces.add(diag.get(j));
+	                }
+            	}
             }
         }
         return agentsPieces;

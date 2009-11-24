@@ -171,7 +171,7 @@ public class Game {
     		return false;
     	}
     	
-    	return true;
+    	return false;
     }
     
     class CheckersControllerThread extends Thread {
@@ -183,7 +183,7 @@ public class Game {
         @Override
         public void run() {
             Thread actThread;
-            while (true/** nie je koniec hry */) {
+            while ( true /** nie je koniec hry */) {
                 actThread = new CheckersControllerActThread();
                 actThread.start();
                 try {

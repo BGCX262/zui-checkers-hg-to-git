@@ -20,6 +20,8 @@ public abstract class Agent {
     
     private final Game game;
     
+    private Move nextMove;
+    
     /**
      * @param game Hra, ktoru tento hrac bude hrat.
      * @param timeToThink Casovy limit, ktory ma tento hrac na premyslenie tahu. <tt>-1</tt>
@@ -115,5 +117,15 @@ public abstract class Agent {
 		
 		return false;
 	}
-	
+
+	public Move getNextMove() {
+    	return nextMove;
+    }
+
+	public void setNextMove(Move nextMove) {
+		//musim nastavit score hry, nie skore skoku
+		nextMove.score = getScore();
+    	this.nextMove = nextMove;
+    }
+
 }
