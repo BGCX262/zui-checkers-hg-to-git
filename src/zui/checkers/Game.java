@@ -13,17 +13,17 @@ import zui.checkers.pieces.Piece;
 public class Game {
 
     public static final String[] supportedAgents = {
+        MinimaxAgent.class.getName(),
         HumanAgent.class.getName(),
         ABCutAgent.class.getName(),
         CutOffSearchAgent.class.getName(),
-        MinimaxAgent.class.getName()
     };
     
     public static final String[] supportedAgentsTitles = {
+        "Minimax",
         "Clovek",
         "A-B orezavanie",
         "Cut-off searching",
-        "Minimax"
     };
     
     private Agent agent01 = null;

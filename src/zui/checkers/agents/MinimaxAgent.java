@@ -3,14 +3,14 @@ package zui.checkers.agents;
 import java.util.Iterator;
 import java.util.Set;
 
-import com.sun.org.apache.xerces.internal.dom.DeepNodeListImpl;
-
 import zui.checkers.Game;
 import zui.checkers.game.Move;
 import zui.checkers.pieces.Piece;
 
 public class MinimaxAgent extends Agent {
 
+    private static final int LEVEL = 1000;
+    
 	private Set<Move> allMoves;
 	private Iterator<Move> moveToCompute;
 	
@@ -45,7 +45,7 @@ public class MinimaxAgent extends Agent {
     	Move m;
     	if(moveToCompute.hasNext()) {
     		m = moveToCompute.next();
-    		int score = playGame(m);
+    		int score = playGame(m, LEVEL);
     		if(score > getNextMove().score) {
         		setNextMove(m);
         	}
@@ -58,22 +58,16 @@ public class MinimaxAgent extends Agent {
     	return getNextMove();
     }
     
-    private int playGame(Move m) {
+    private int playGame(Move m, int level) {
+        if (level == 0) {
+            return getScore();
+        }
+        
     	Piece p = m.piece;
     	Piece tmpPiece = p.clone();
     	p.doMove(m);
     	
-    	
-//    	Thread actThread = Thread.currentThread();
-//    	try{
-//    		getGame().getGui().repaintBoard();
-//    		actThread.sleep(1);
-//    		
-//    	}catch (Exception e) {
-//			throw new AssertionError(e.getMessage());
-//		}
-    	
-    	if(/*getGame().isEnd()*/ !p.getAgent().hasMoves()) { //koniec rekurzie
+    	if(!p.getAgent().hasMoves()) { //koniec rekurzie
     		// krok spat
 			p.doReverseMove(p, m, tmpPiece);
     		return getScore();
@@ -83,8 +77,7 @@ public class MinimaxAgent extends Agent {
     	int score = 0;
     	for(Iterator<Move> i = player.getAllMoves().iterator(); i.hasNext();){ // prejdem hracove moznosti
     		Move move = i.next();
-    		int playedScore = playGame(m);
-    		
+    		int playedScore = playGame(move, --level);
     		if(player == this ) { // ak robim tah ja hladam maximum
     			if(score < playedScore ) {
     				score = playedScore;
