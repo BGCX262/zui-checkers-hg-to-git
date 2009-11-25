@@ -1,0 +1,9 @@
+Pracovali: Vician Michal, Votypka Lukas
+
+Napriek tomu ze to odovzdavame neskor ako sme mali, tak to nie je spravne podla nasich predstav.
+
+Hra ako samotna je celkom univerzalna a pouzitelna na aplikovanie roznych agentov.
+
+Vyvoj bol verziovany na http://code.google.com/p/zui-checkers/source/list
+
+Konecne problemy boli s klonovanim mapy, kde sme nevedeli uz v obmedzenom case najst chybu.

@@ -9,7 +9,7 @@ import zui.checkers.pieces.Piece;
 
 public class MinimaxAgent extends Agent {
 
-    private static final int LEVEL = 5;
+    private static final int LEVEL = 6;
     
 	private Set<Move> allMoves;
 	private Iterator<Move> moveToCompute;
