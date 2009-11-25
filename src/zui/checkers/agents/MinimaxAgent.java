@@ -9,7 +9,7 @@ import zui.checkers.pieces.Piece;
 
 public class MinimaxAgent extends Agent {
 
-    private static final int LEVEL = 1000;
+    private static final int LEVEL = 5;
     
 	private Set<Move> allMoves;
 	private Iterator<Move> moveToCompute;
@@ -59,7 +59,7 @@ public class MinimaxAgent extends Agent {
     }
     
     private int playGame(Move m, int level) {
-        if (level == 0) {
+        if (--level == 0) {
             return getScore();
         }
         
@@ -77,7 +77,7 @@ public class MinimaxAgent extends Agent {
     	int score = 0;
     	for(Iterator<Move> i = player.getAllMoves().iterator(); i.hasNext();){ // prejdem hracove moznosti
     		Move move = i.next();
-    		int playedScore = playGame(move, --level);
+    		int playedScore = playGame(move, level);
     		if(player == this ) { // ak robim tah ja hladam maximum
     			if(score < playedScore ) {
     				score = playedScore;
